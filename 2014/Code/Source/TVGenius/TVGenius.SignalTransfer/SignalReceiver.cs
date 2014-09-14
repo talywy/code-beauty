@@ -5,14 +5,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TVGenius.Model;
 using TVGenius.SignalTransfer.Events;
-using TVGenius.TVScanner;
 using TVGenius.Utils;
 
 namespace TVGenius.SignalTransfer
 {
     public class SignalReceiver
     {
-        public event EventHandler<SignalReceivedEventArgs> SignalReceived;
+        public event EventHandler<ActionReceivedEventArgs> ActionReceived;
 
         private bool _isRunning;
         private readonly string _tvJson;
@@ -37,30 +36,37 @@ namespace TVGenius.SignalTransfer
                         var bindStr = _tv.Bind;
                         LogUtil.Log.InfoFormat("MockTV listen single:{0}", bindStr);
                         server.Bind(bindStr);
-
                         while (_isRunning)
                         {
-                            string message = server.ReceiveString();
-                            LogUtil.Log.Debug("Got message:" + message);
+                            try
+                            {
+                                string message = server.ReceiveString();
+                                LogUtil.Log.Debug("Got message:" + message);
 
-                            var msgJson = JsonConvert.DeserializeObject<JObject>(message);
-                            var signal = msgJson["signal"].Value<string>();
-                            if (signal.Equals(SignalDefine.SCAN))
-                            {
-                                server.Send(_tvJson);
+                                var msgJson = JsonConvert.DeserializeObject<JObject>(message);
+                                var signal = msgJson["signal"].Value<string>();
+                                if (signal.Equals(SignalDefine.SCAN))
+                                {
+                                    server.Send(_tvJson);
+                                }
+                                else if (signal.Equals(SignalDefine.HEATBEAT))
+                                {
+                                    var msg = GetResponseMessage(SignalDefine.ECHO);
+                                    server.Send(msg);
+                                }
+                                else if (signal.Equals(SignalDefine.ACTION))
+                                {
+                                    server.Send("{signal:\"OK\"}");
+                                    var data = msgJson["data"].Value<JObject>();
+                                    ActionReceived(this, new ActionReceivedEventArgs(data));
+                                }
                             }
-                            else if (signal.Equals(SignalDefine.HEATBEAT))
+                            catch (Exception ex)
                             {
-                                var msg = GetResponseMessage(SignalDefine.ECHO);
-                                server.Send(msg);
-                            }
-                            else if (signal.Equals(SignalDefine.ACTION))
-                            {
-                                var data = msgJson["data"].Value<string>();
-                                SignalReceived(this, new SignalReceivedEventArgs(data));
+                                LogUtil.Log.Error("Receive signal excepion", ex);
                             }
 
-                            Thread.Sleep(10);
+                            Thread.Sleep(100);
                         }
                     }
                 }

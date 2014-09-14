@@ -41,11 +41,9 @@
   <ItemGroup>
     <Compile Include="MarkAttribute.cs" />
     <Compile Include="MockTV.cs" />
-    <Compile Include="MouseAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyNotifyObject.cs" />
     <Compile Include="TVState.cs" />
-    <Compile Include="VolumeAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

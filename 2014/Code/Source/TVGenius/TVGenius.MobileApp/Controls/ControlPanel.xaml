@@ -2,23 +2,71 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:TVGenius.MobileApp.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
     <DockPanel>
 
-        <Button DockPanel.Dock="Bottom" Margin="5" Content="Return" Click="ButtonBase_OnClick" />
+        <Button DockPanel.Dock="Bottom" Margin="5" Content="Return" Click="BtnReturnClick" />
         
         <Grid Margin="3,3,3,60">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30*"></RowDefinition>
-                <RowDefinition Height="30*"></RowDefinition>
-                <RowDefinition Height="30*"></RowDefinition>
+                <RowDefinition Height="10*"></RowDefinition>
+                <RowDefinition Height="40*"></RowDefinition>
+                <RowDefinition Height="25*"></RowDefinition>
+                <RowDefinition Height="25*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Content="Local Resource" Click="BtnLoacalResourceClick"/>
-            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Content="Online Resource" Click="BtnOnlineResourceClick" />
-            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Content="Voice Control" Click="BtnVoiceControlClick" />
+
+            <StackPanel Name="TVInfo" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Image Source="{Binding Icon}"/>
+                <TextBlock Margin="0,0,0,5" VerticalAlignment="Center" >
+                    <Run Text="{Binding Brand}"/>
+                    <Run Text=" - "/>
+                    <Run Text="{Binding Model}" />
+                </TextBlock>
+            </StackPanel>
+           
+            
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="1"/>
+                    </Style>
+                </StackPanel.Resources>
+                <GroupBox Header="Channel">
+                    <StackPanel>
+                        <Button Content="▲" Command="{x:Static controls:ControlPanel.ChannelNextCmd}"/>
+                        <Button Content="▼" Command="{x:Static controls:ControlPanel.ChannelPreviousCmd}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Volume">
+                    <StackPanel>
+                        <Button Content="▲" Command="{x:Static controls:ControlPanel.VolumeIncreaseCmd}"/>
+                        <Button Content="▼" Command="{x:Static controls:ControlPanel.VolumeDecreaseCmd}"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Power">
+                    <StackPanel>
+                        <Button Content="■" Command="{x:Static controls:ControlPanel.HibernateCmd}"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+
+            <GroupBox Grid.Row="2" Header="Media Library" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="3,1,1,1" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button VerticalAlignment="Center" HorizontalAlignment="Center"  Content="Local Resource" Click="BtnLoacalResourceClick"/>
+                    <Button VerticalAlignment="Center" HorizontalAlignment="Center"  Content="Online Resource" Click="BtnOnlineResourceClick" />
+                </StackPanel>
+            </GroupBox>
+         
+            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" Content="Voice Control" Click="BtnVoiceControlClick" />
         </Grid>
 
         

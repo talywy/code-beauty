@@ -14,7 +14,6 @@
                     <!-- 设置控件模板 -->
 
                     <Setter Property="Template">
-
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
                                 <Border Background="{TemplateBinding Background}">
@@ -44,7 +43,7 @@
                     <Border HorizontalAlignment="Stretch" Margin="1" CornerRadius="5" Padding="3" BorderThickness="1" BorderBrush="Gainsboro">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding Icon}" HorizontalAlignment="Left" />
-                            <StackPanel VerticalAlignment="Center" Margin="0,0,0,3">
+                            <StackPanel VerticalAlignment="Center" Margin="5,0,0,0">
                                 <TextBlock Text="{Binding Brand,StringFormat=Brand:{0}}"  />
                                 <TextBlock Text="{Binding Model,StringFormat=Model:{0}}"  />
                                 <TextBlock Text="{Binding State, StringFormat=State:{0}}" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TVGenius.Utils;
@@ -86,7 +85,43 @@ namespace TVGenius.MockTV
         {
             get;
             private set;
-        } 
+        }
+
+        /// <summary>
+        /// 当前频道
+        /// </summary>
+        public int Channel
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 频道最大数目
+        /// </summary>
+        public int MaxChannel
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 当前音量
+        /// </summary>
+        public int Volume
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// 最大音量
+        /// </summary>
+        public int MaxVolume
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// 初始化
@@ -102,6 +137,10 @@ namespace TVGenius.MockTV
             Model = configJson["model"].Value<string>();
             Bind = configJson["bind"].Value<string>();
             Sn = configJson["sn"].Value<string>();
+            Channel = configJson["channel"].Value<int>();
+            MaxChannel = configJson["maxchannel"].Value<int>(); 
+            Volume = configJson["volume"].Value<int>(); 
+            MaxChannel = configJson["maxvolume"].Value<int>(); 
         }
     }
 }

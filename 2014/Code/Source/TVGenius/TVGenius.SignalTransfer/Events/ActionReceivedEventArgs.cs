@@ -1,16 +1,17 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
 
 namespace TVGenius.SignalTransfer.Events
 {
     /// <summary>
     /// 信号接收事件参数
     /// </summary>
-    public class SignalReceivedEventArgs : EventArgs
+    public class ActionReceivedEventArgs : EventArgs
     {
         /// <summary>
         /// 信号
         /// </summary>
-        public string Signal
+        public JObject Data
         {
             get; set;
         }
@@ -18,10 +19,10 @@ namespace TVGenius.SignalTransfer.Events
         /// <summary>
         /// 信号事件参数
         /// </summary>
-        /// <param name="signal">信号</param>
-        public SignalReceivedEventArgs(string signal)
+        /// <param name="data">数据</param>
+        public ActionReceivedEventArgs(JObject data)
         {
-            Signal = signal;
+            Data = data;
         }
     }
 }

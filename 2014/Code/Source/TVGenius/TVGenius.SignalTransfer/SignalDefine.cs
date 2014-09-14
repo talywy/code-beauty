@@ -1,4 +1,4 @@
-﻿namespace TVGenius.TVScanner
+﻿namespace TVGenius.SignalTransfer
 {
     /// <summary>
     /// 信号定义

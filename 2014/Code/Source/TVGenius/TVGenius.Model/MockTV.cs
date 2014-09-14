@@ -13,6 +13,10 @@ namespace TVGenius.Model
         private string _icon;
         private string _sn;
         private string _bind;
+        private int _channel;
+        private int _maxChannel;
+        private int _volume;
+        private int _maxVolume;
         private TVState _state;
         private DateTime _lastConnectTime;
 
@@ -81,6 +85,42 @@ namespace TVGenius.Model
         {
             get { return _lastConnectTime; }
             set { _lastConnectTime = value; }
+        }
+
+        /// <summary>
+        /// 当前频道
+        /// </summary>
+        public int Channel
+        {
+            get { return _channel; }
+            set { _channel = value; }
+        }
+
+        /// <summary>
+        /// 频道最大数目
+        /// </summary>
+        public int MaxChannel
+        {
+            get { return _maxChannel; }
+            set { _maxChannel = value; }
+        }
+
+        /// <summary>
+        /// 当前音量
+        /// </summary>
+        public int Volume
+        {
+            get { return _volume; }
+            set { _volume = value; }
+        }
+
+        /// <summary>
+        /// 最大音量
+        /// </summary>
+        public int MaxVolume
+        {
+            get { return _maxVolume; }
+            set { _maxVolume = value; }
         }
     }
 }

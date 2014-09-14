@@ -67,6 +67,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ControlPanel.Command.cs" />
     <Compile Include="Controls\ControlPanel.xaml.cs">
       <DependentUpon>ControlPanel.xaml</DependentUpon>
     </Compile>
@@ -135,6 +136,10 @@
       <Project>{FEA230BD-6012-473C-9BBF-F8376C1BB9D4}</Project>
       <Name>TVGenius.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TVGenius.SignalTransfer\TVGenius.SignalTransfer.csproj">
+      <Project>{5E872651-1DA2-4CD4-8A1D-E01216E967A8}</Project>
+      <Name>TVGenius.SignalTransfer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TVGenius.TVScanner\TVGenius.TVScanner.csproj">
       <Project>{6A45DEE4-EB01-4452-9E57-9FD9A640675A}</Project>
       <Name>TVGenius.TVScanner</Name>
@@ -146,11 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="tvgenius.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="SignalMap.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

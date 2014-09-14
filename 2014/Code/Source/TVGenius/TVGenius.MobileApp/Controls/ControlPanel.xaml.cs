@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using TVGenius.Model;
+using TVGenius.SignalTransfer.Dispatcher;
 
 namespace TVGenius.MobileApp.Controls
 {
@@ -12,19 +14,55 @@ namespace TVGenius.MobileApp.Controls
     {
         public event EventHandler Return;
 
+        private SingalDispatcherBase _singalDispatcher;
+
+        private static readonly DependencyProperty TVProperty;
+
+        static ControlPanel()
+        {
+            TVProperty = DependencyProperty.Register("TV", typeof(MockTV), typeof(ControlPanel), new PropertyMetadata(OnTVPropertyChanged));
+        }
+
+        private static void OnTVPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+        }
+
+        public MockTV TV
+        {
+            get { return (MockTV) GetValue(TVProperty); }
+            private set { SetValue(TVProperty, value);} 
+        }
+
         public ControlPanel()
         {
             InitializeComponent();
+            BindingCommand();
         }
 
         public void SetMockTV(MockTV tv)
         {
-            
+            TV = tv;
+            TV.PropertyChanged += NewTVOnPropertyChanged;
+            TVInfo.DataContext = TV;
+            _singalDispatcher = DispatcherFactory.GetDispatcher(tv);
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void NewTVOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Return(this, e);
+            if (e.PropertyName.Equals("State") && ((MockTV)sender).State == TVState.Offline)
+            {
+                TriggerReturn();
+            }
+        }
+
+        private void BtnReturnClick(object sender, RoutedEventArgs e)
+        {
+            TriggerReturn();
+        }
+
+        private void TriggerReturn()
+        {
+            Return(this, null);
         }
 
         private void BtnLoacalResourceClick(object sender, RoutedEventArgs e)

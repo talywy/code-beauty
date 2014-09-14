@@ -1,4 +1,4 @@
-﻿namespace TVGenius.Model
+﻿namespace TVGenius.SignalTransfer
 {
     /// <summary>
     /// 音量动作

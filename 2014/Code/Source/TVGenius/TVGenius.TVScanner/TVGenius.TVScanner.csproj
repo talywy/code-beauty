@@ -49,8 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SignalDefine.cs" />
-    <Compile Include="SignalMap.cs" />
     <Compile Include="TVFoundEventArgs.cs" />
     <Compile Include="TVHeartBeatEventArgs.cs" />
     <Compile Include="TVScanner.cs" />
@@ -60,6 +58,10 @@
     <ProjectReference Include="..\TVGenius.Model\TVGenius.Model.csproj">
       <Project>{FEA230BD-6012-473C-9BBF-F8376C1BB9D4}</Project>
       <Name>TVGenius.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TVGenius.SignalTransfer\TVGenius.SignalTransfer.csproj">
+      <Project>{5e872651-1da2-4cd4-8a1d-e01216e967a8}</Project>
+      <Name>TVGenius.SignalTransfer</Name>
     </ProjectReference>
     <ProjectReference Include="..\TVGenius.Utils\TVGenius.Utils.csproj">
       <Project>{431E169C-32C0-4117-BC6A-012A8FA4653B}</Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using TVGenius.MobileApp.Controls;
 
 namespace TVGenius.MobileApp
@@ -28,22 +29,31 @@ namespace TVGenius.MobileApp
 
         void AppWinLoaded(object sender, RoutedEventArgs e)
         {
-            this.Content = _tvListControl;
+            SetContent(_tvListControl);
         }
 
         void ControlPanelReturn(object sender, EventArgs e)
         {
-            this.Content = _tvListControl;
+            SetContent(_tvListControl);
         }
 
         void TVListControlMockTVSelected(object sender, Events.MockTVSelectedEventArgs e)
         {
-            this.Content = _controlPanel;
+            _controlPanel.SetMockTV(e.TV);
+            SetContent(_controlPanel);
         }
 
         void OnMainWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             _tvListControl.SaveTVList();
+        }
+
+        private void SetContent(UserControl control)
+        {
+            this.Dispatcher.Invoke(new Action(() =>
+            {
+                this.Content = control;
+            }));
         }
     }
 }

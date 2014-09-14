@@ -35,10 +35,20 @@ namespace TVGenius.MobileApp.Controls
 
         private void TVListOnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count < 1)
+            {
+                return;
+            }
+
             var tv = (MockTV)e.AddedItems[0];
             if (tv.State == TVState.PowerOn)
             {
                 MockTVSelected(this, new MockTVSelectedEventArgs(tv));
+                TVList.SelectedItem = null;
+            }
+            else
+            {
+                MessageBox.Show("The TV is not power on!", "Tip");
             }
         }
 
@@ -80,7 +90,7 @@ namespace TVGenius.MobileApp.Controls
 
         private void BtnRefreshClick(object sender, RoutedEventArgs e)
         {
-            // TODO:
+            _tvScanner.Refresh();
         }
     }
 }

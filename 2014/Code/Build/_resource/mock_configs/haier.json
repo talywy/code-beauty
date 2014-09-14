@@ -1,8 +1,11 @@
 {
-	name:"haier",
 	brand:"Haier",
 	model:"LH42M6000",
 	icon:"haier.ico",
 	bind:"tcp://127.0.0.1:12000",
-	sn:"4EB29882-F521-4543-8D57-8F9DAEA56220"
+	sn:"4EB29882-F521-4543-8D57-8F9DAEA56220",
+	channel:14,
+	maxchannel: 100,
+	volume:25,
+	maxvolume:60
 }
