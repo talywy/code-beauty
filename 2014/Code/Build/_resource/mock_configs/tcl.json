@@ -1,0 +1,8 @@
+{
+	name:"tcl",
+	brand:"TCL",
+	model:"L55E5700A-UD",
+	icon:"tcl.ico",
+	bind:"tcp://127.0.0.1:13000",
+	sn:"5EEB4BE8-E327-4141-AFFD-2EB5CA32481E"
+}

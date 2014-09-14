@@ -1,0 +1,6 @@
+﻿<Window x:Class="TVGenius.MobileApp.AppWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:model="clr-namespace:TVGenius.Model;assembly=TVGenius.Model"
+        Title="TVGenius" Height="500" Width="300" Name="Win">
+</Window>
