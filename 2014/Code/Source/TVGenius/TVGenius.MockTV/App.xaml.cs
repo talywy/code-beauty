@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
+﻿using System.Configuration;
 using System.Windows;
 using System.Windows.Threading;
 using TVGenius.Utils;
@@ -16,7 +12,14 @@ namespace TVGenius.MockTV
     {
         public App()
         {
-            ConsoleHelper.AllocConsole();
+            var isDebugStr = ConfigurationManager.AppSettings["IsDebug"];
+            bool isDebug;
+            bool.TryParse(isDebugStr, out isDebug);
+
+            if (isDebug)
+            {
+                ConsoleHelper.AllocConsole();
+            }
 
             LogUtil.Init(typeof(App));
 

@@ -124,11 +124,11 @@ namespace TVGenius.Model
             get { return _volume; }
             set
             {
-                if (_volume < 0)
+                if (value < 0)
                 {
                     value = 0;
                 }
-                if (_volume > MaxVolume)
+                if (value > MaxVolume)
                 {
                     value = MaxVolume;
                 }

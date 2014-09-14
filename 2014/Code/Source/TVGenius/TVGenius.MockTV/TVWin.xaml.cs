@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Timers;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -38,7 +37,7 @@ namespace TVGenius.MockTV
 
         private readonly SignalReceiver _signalReceiver;
         private List<string> _videos;
-        private Timer _tipTimer;
+        private readonly Timer _tipTimer;
         private const int TIP_DURATION = 3000;
 
         private readonly TVModel _tv;
@@ -95,7 +94,7 @@ namespace TVGenius.MockTV
             _signalReceiver.ActionReceived += ActionReceiverOnActionReceived;
             _signalReceiver.Run();
            _videos = VideoList.Instance.GetVideList();
-            SetVideo(0);
+            SetVideo();
         }
 
         private void ActionReceiverOnActionReceived(object sender, ActionReceivedEventArgs e)
@@ -103,23 +102,21 @@ namespace TVGenius.MockTV
             this.Dispatcher.Invoke(new Action(() => HandleAction(e.Data)));
         }
 
-        private void MediaOnMediaEnded(object sender, RoutedEventArgs e)
-        {
-            Media.Stop();
-            Media.Play();
-        }
-
-        private void SetVideo(int videoIndex)
-        {
-            Media.Source = new Uri(_videos[videoIndex]);
-        }
-
+        /// <summary>
+        /// 处理收到的信号数据
+        /// </summary>
+        /// <param name="data">数据</param>
         private void HandleAction(JObject data)
         {
             var type = data["type"].Value<string>();
 
             if (type.Equals(ActionType.CHANGE_CHANNEL))
             {
+                if (IsHibernate)
+                {
+                    return;
+                }
+
                 var channelAction = (ChannelAction)data["data"]["action"].Value<int>();
                 if (channelAction == ChannelAction.Next)
                 {
@@ -134,18 +131,26 @@ namespace TVGenius.MockTV
                     var num = data["num"].Value<int>();
                     _tv.Channel = num;
                 }
-                ShowTip("Channel:" + _tv.Channel);
-                SetVideo(_tv.Channel % _videos.Count);
+                
+                SetVideo();
             }
-            else if(type.Equals(ActionType.VOLUME_DECREASE))
+            else if (type.Equals(ActionType.VOLUME_DECREASE))
             {
-                ShowTip("Volume:" + --_tv.Volume);
-                Media.Volume = (double)_tv.Volume / _tv.MaxVolume;
+                if (IsHibernate)
+                {
+                    return;
+                }
+                --_tv.Volume;
+                SetVolume();
             }
             else if (type.Equals(ActionType.VOLUME_INCREASE))
             {
-                ShowTip("Volume:" + ++_tv.Volume);
-                Media.Volume = (double) _tv.Volume / _tv.MaxVolume;
+                if (IsHibernate)
+                {
+                    return;
+                }
+                ++_tv.Volume;
+                SetVolume();
             }
             else if(type.Equals(ActionType.HIBERNATE))
             {
@@ -157,12 +162,31 @@ namespace TVGenius.MockTV
             }
         }
 
+        private void SetVolume()
+        {
+            ShowTip("Volume:" + _tv.Volume);
+            Player.Volume = (double)_tv.Volume / _tv.MaxVolume;
+        }
+
+        private void SetVideo()
+        {
+            ShowTip("Channel:" + _tv.Channel);
+            var index = _tv.Channel % _videos.Count;
+            Player.Source = new Uri(_videos[index]);
+        }
+
         private void ShowTip(string tip)
         {
             _tipTimer.Stop();
             TxtTip.Visibility = Visibility.Visible;
             TxtTip.Text = tip;
             _tipTimer.Start();
+        }
+
+        private void Player_OnMediaEnded(object sender, RoutedEventArgs e)
+        {
+            Player.Position = new TimeSpan(0, 0, 1);
+            Player.Play();
         }
     }
 }

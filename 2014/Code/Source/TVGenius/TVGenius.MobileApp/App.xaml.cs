@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
+﻿using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using TVGenius.SignalTransfer;
@@ -19,7 +14,14 @@ namespace TVGenius.MobileApp
     {
         public App()
         {
-            ConsoleHelper.AllocConsole();
+            var isDebugStr =  ConfigurationManager.AppSettings["IsDebug"];
+            bool isDebug;
+            bool.TryParse(isDebugStr, out isDebug);
+
+            if (isDebug)
+            {
+                ConsoleHelper.AllocConsole();
+            }
 
             LogUtil.Init(typeof(App));
 

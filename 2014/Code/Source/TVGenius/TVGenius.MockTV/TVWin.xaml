@@ -8,19 +8,60 @@
     <Window.Resources>
         <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" False="Collapsed" True="Visible" />
         <common:BooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" True="Collapsed" False="Visible" />
-        <common:InverseBooleanConverter x:Key="InverseBooleanConverter" />
     </Window.Resources>
     <DockPanel>
         <Grid>
             <Grid Visibility="{Binding RelativeSource={ RelativeSource AncestorType={x:Type mockTV:TVWin}}, Path=IsHibernate, Converter= {StaticResource InverseBooleanToVisibilityConverter } }">
-                <MediaElement Name="Media" IsMuted="{Binding RelativeSource={ RelativeSource AncestorType={x:Type mockTV:TVWin}}, Path=IsHibernate}"  Stretch="Fill" UnloadedBehavior="Manual" LoadedBehavior="Play" MediaEnded="MediaOnMediaEnded" />
+                <MediaElement Name="Player"  IsMuted="{Binding RelativeSource={RelativeSource AncestorType={x:Type mockTV:TVWin}}, Path=IsHibernate}"  Stretch="Fill" UnloadedBehavior="Manual" LoadedBehavior="Play" MediaEnded="Player_OnMediaEnded"/>
                 <TextBlock Name="TxtTip" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="24" Foreground="DarkOrange"  Margin="0,5,10,0" Background="AliceBlue"/>
                 <TextBlock Name="TxtTime" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,5" Foreground="Gray" Background="White" />
             </Grid>
            
-            <Border Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type mockTV:TVWin}}, Path=IsHibernate, Converter= {StaticResource BooleanToVisibilityConverter } }" Background="Gray">
-                <TextBlock Text="Hibernate" FontSize="26" Foreground="Fuchsia"/>
-            </Border>
+            <Grid Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type mockTV:TVWin}}, Path=IsHibernate, Converter= {StaticResource BooleanToVisibilityConverter } }" Background="Gray">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Name="TxtHibernate" Text="Hibernate" FontSize="26">
+                    <TextBlock.Foreground>
+                        <SolidColorBrush Color="Fuchsia" />
+                    </TextBlock.Foreground>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={ RelativeSource AncestorType={x:Type mockTV:TVWin}}, Path=IsHibernate}" Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard x:Name="tt" >
+                                            <Storyboard RepeatBehavior="Forever"  Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)">
+                                                <ColorAnimation                                                                   
+                                                     FillBehavior="Stop"                                                                  
+                                                     From="AliceBlue"                                                                  
+                                                     To="Red"                                                                  
+                                                     By="DeepSkyBlue"                                                                  
+                                                     Duration="0:0:4" />
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="FontSize"
+                                                    From="14" To="56" Duration="0:0:6" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <RemoveStoryboard  BeginStoryboardName="tt"></RemoveStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                        
+                        <!--<EventTrigger RoutedEvent="Page.Loaded">
+                        <BeginStoryboard>
+                            <Storyboard  RepeatBehavior="Forever" AutoReverse="True">
+                             
+
+                                 
+                                    
+                                <ColorAnimation From="Blue" To="Red" Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" FillBehavior="Stop" Duration="0:0:1"/>
+                                </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>-->
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>

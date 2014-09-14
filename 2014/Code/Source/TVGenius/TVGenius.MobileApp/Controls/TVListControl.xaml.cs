@@ -44,12 +44,13 @@ namespace TVGenius.MobileApp.Controls
             if (tv.State != TVState.Offline)
             {
                 MockTVSelected(this, new MockTVSelectedEventArgs(tv));
-                TVList.SelectedItem = null;
             }
             else
             {
                 MessageBox.Show("The TV is not power on!", "Tip");
             }
+
+            TVList.SelectedItem = null;
         }
 
         private void TVScannerOnTVFound(object sender, TVFoundEventArgs e)
