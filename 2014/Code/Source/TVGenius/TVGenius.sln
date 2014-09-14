@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVGenius.Model", "TVGenius.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVGenius.SignalTransfer", "TVGenius.SignalTransfer\TVGenius.SignalTransfer.csproj", "{5E872651-1DA2-4CD4-8A1D-E01216E967A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TVGenius.Common", "TVGenius.Common\TVGenius.Common.csproj", "{BCCAFD68-D584-4928-8F28-617BC85F9D18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{5E872651-1DA2-4CD4-8A1D-E01216E967A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E872651-1DA2-4CD4-8A1D-E01216E967A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E872651-1DA2-4CD4-8A1D-E01216E967A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCCAFD68-D584-4928-8F28-617BC85F9D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCCAFD68-D584-4928-8F28-617BC85F9D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCCAFD68-D584-4928-8F28-617BC85F9D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCCAFD68-D584-4928-8F28-617BC85F9D18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,5 +101,6 @@ Global
 		{431E169C-32C0-4117-BC6A-012A8FA4653B} = {734960B9-69D3-494B-B6B7-2853435BE510}
 		{FEA230BD-6012-473C-9BBF-F8376C1BB9D4} = {734960B9-69D3-494B-B6B7-2853435BE510}
 		{5E872651-1DA2-4CD4-8A1D-E01216E967A8} = {734960B9-69D3-494B-B6B7-2853435BE510}
+		{BCCAFD68-D584-4928-8F28-617BC85F9D18} = {734960B9-69D3-494B-B6B7-2853435BE510}
 	EndGlobalSection
 EndGlobal

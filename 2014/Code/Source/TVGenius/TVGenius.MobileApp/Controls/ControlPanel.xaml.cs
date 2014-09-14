@@ -62,6 +62,7 @@ namespace TVGenius.MobileApp.Controls
 
         private void TriggerReturn()
         {
+            TV.PropertyChanged -= NewTVOnPropertyChanged;
             Return(this, null);
         }
 

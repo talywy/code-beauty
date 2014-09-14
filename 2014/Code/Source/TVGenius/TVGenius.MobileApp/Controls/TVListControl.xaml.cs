@@ -41,7 +41,7 @@ namespace TVGenius.MobileApp.Controls
             }
 
             var tv = (MockTV)e.AddedItems[0];
-            if (tv.State == TVState.PowerOn)
+            if (tv.State != TVState.Offline)
             {
                 MockTVSelected(this, new MockTVSelectedEventArgs(tv));
                 TVList.SelectedItem = null;
@@ -59,7 +59,7 @@ namespace TVGenius.MobileApp.Controls
             {
                 if (_tvListMgr.ContainTV(e.TV.Sn))
                 {
-                    _tvListMgr.RefreshTV(e.TV.Sn);
+                    _tvListMgr.RefreshTV(e.TV.Sn, e.TV.State);
                 }
                 else
                 {
@@ -75,7 +75,7 @@ namespace TVGenius.MobileApp.Controls
 
         private void TVScannerOnTVHeartBeat(object sender, TVHeartBeatEventArgs e)
         {
-            _tvListMgr.RefreshTV(e.TVSn);
+            _tvListMgr.RefreshTV(e.TVSn, e.State);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)

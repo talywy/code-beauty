@@ -1,6 +1,6 @@
 ﻿namespace TVGenius.SignalTransfer
 {
-    class ActionType
+    public class ActionType
     {
         public const string CHANGE_CHANNEL = "change_channel";
         public const string VOLUME_INCREASE = "volume_increase";

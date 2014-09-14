@@ -64,7 +64,7 @@ namespace TVGenius.Model
             get { return _state; }
             set
             {
-                _state = value;
+                _state = value; 
                 NotifyPropertyChanged("State");
             }
         }
@@ -93,7 +93,18 @@ namespace TVGenius.Model
         public int Channel
         {
             get { return _channel; }
-            set { _channel = value; }
+            set
+            {
+                if (value < 0)
+                {
+                    value = MaxChannel;
+                }
+                if (value > MaxChannel)
+                {
+                    value = 0;
+                }
+                _channel = value;
+            }
         }
 
         /// <summary>
@@ -111,7 +122,18 @@ namespace TVGenius.Model
         public int Volume
         {
             get { return _volume; }
-            set { _volume = value; }
+            set
+            {
+                if (_volume < 0)
+                {
+                    value = 0;
+                }
+                if (_volume > MaxVolume)
+                {
+                    value = MaxVolume;
+                }
+                _volume = value;
+            }
         }
 
         /// <summary>

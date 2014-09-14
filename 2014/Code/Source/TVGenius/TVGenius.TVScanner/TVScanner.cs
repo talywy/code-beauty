@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using NetMQ;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TVGenius.Model;
 using TVGenius.SignalTransfer;
+using TVGenius.SignalTransfer.Events;
 using TVGenius.Utils;
 
 namespace TVGenius.TVScanner
@@ -18,7 +18,9 @@ namespace TVGenius.TVScanner
         public event EventHandler<TVFoundEventArgs> TVFound;
         public event EventHandler<TVHeartBeatEventArgs> TVHeartBeat;
 
+        
         private readonly List<Thread> _threads = new List<Thread>();
+        private readonly List<NetClient> _clients = new List<NetClient>();
 
         private const int HEART_BEAT_INTERVAL = 3000;
 
@@ -33,37 +35,59 @@ namespace TVGenius.TVScanner
 
             foreach (var bind in binds)
             {
-                var t = new Thread(bindStr =>
+                var client = NetClientPool.Instance.GetClient(bind);
+                if (!_clients.Contains(client))
                 {
-                    var client = ZMQClientPool.Instance.GetClient(bindStr.ToString());
-                    LogUtil.Log.DebugFormat("Try connect tv:{0}", bindStr);
-                    var scanMsg = CreateSingleMessage(SignalDefine.SCAN);
-                    client.Send(scanMsg);
-                    var message = client.ReceiveString();
-                    LogUtil.Log.InfoFormat(message);
-                    var mockTV = GetMockTV(message);
-                    if (mockTV != null)
-                    {
-                        TVFound(this, new TVFoundEventArgs(mockTV));
-                    }
+                    _clients.Add(client);
+                    client.MessageReceived += ClientOnMessageReceived; 
+                }
+               
+                var scanMsg = CreateSingleMessage(SignalDefine.SCAN);
+                client.SendMessage(scanMsg);
 
+                var t = new Thread(() =>
+                {
                     while (_isRunning)
                     {
                         var heartbeatMsg = CreateSingleMessage(SignalDefine.HEATBEAT);
-                        client.Send(heartbeatMsg);
-                        var repMsg = client.ReceiveString();
-                        var repMsgJson = JsonConvert.DeserializeObject<JObject>(repMsg);
-                        var signal = repMsgJson["signal"].Value<string>();
-                        if (signal.Equals(SignalDefine.ECHO))
-                        {
-                            TVHeartBeat(this, new TVHeartBeatEventArgs(repMsgJson["sn"].Value<string>()));
-                        }
-
+                        client.SendMessage(heartbeatMsg);
                         Thread.Sleep(HEART_BEAT_INTERVAL);
                     }
-                }) { IsBackground = true };
+                }) {IsBackground = true};
+                t.Start();
+                    
                 _threads.Add(t);
-                t.Start(bind);
+            }
+        }
+
+        private void ClientOnMessageReceived(object sender, NetClinetMessageEventArgs e)
+        {
+            LogUtil.Log.DebugFormat("ClientOnMessageReceived:{0}", e.Message);
+
+            var repMsgJson = JsonConvert.DeserializeObject<JObject>(e.Message);
+
+            if (repMsgJson["signal"] != null)
+            {
+                var signal = repMsgJson["signal"].Value<string>();
+                var stateStr = repMsgJson["state"].Value<string>();
+                TVState state;
+                var success = Enum.TryParse(stateStr, out state);
+                if (!success)
+                {
+                    LogUtil.Log.ErrorFormat("Parse tv state error:{0}", stateStr);
+                }
+                if (signal.Equals(SignalDefine.ECHO))
+                {
+                    TVHeartBeat(this, new TVHeartBeatEventArgs(repMsgJson["sn"].Value<string>(), state));
+                }
+            }
+            else
+            {
+                var mockTV = GetMockTV(e.Message);
+                if (mockTV != null)
+                {
+                    TVFound(this, new TVFoundEventArgs(mockTV));
+                } 
             }
         }
 
@@ -114,23 +138,14 @@ namespace TVGenius.TVScanner
         /// </summary>
         public void Refresh()
         {
-            try
+            new Thread(() =>
             {
-                Stop();
-                foreach (Thread thread in _threads)
+                foreach (NetClient client in _clients)
                 {
-                    if (thread.IsAlive)
-                    {
-                        thread.Abort();
-                    }
+                    var scanMsg = CreateSingleMessage(SignalDefine.SCAN);
+                    client.SendMessage(scanMsg);
                 }
-                _threads.Clear();
-                Start();
-            }
-            catch (Exception ex)
-            {
-                LogUtil.Log.Error("Refresh tv list exception", ex);
-            }
+            }){IsBackground = true}.Start();
         }
     }
 }

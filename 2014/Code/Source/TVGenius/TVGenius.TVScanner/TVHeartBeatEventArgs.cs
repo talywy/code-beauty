@@ -1,4 +1,5 @@
 ﻿using System;
+using TVGenius.Model;
 
 namespace TVGenius.TVScanner
 {
@@ -10,9 +11,16 @@ namespace TVGenius.TVScanner
             private set;
         }
 
-        public TVHeartBeatEventArgs(string tvSN)
+        public TVState State
+        {
+            get;
+            private set;
+        }
+
+        public TVHeartBeatEventArgs(string tvSN, TVState state)
         {
             TVSn = tvSN;
+            State = state;
         }
     }
 }

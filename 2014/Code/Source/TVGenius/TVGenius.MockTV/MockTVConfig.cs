@@ -139,8 +139,8 @@ namespace TVGenius.MockTV
             Sn = configJson["sn"].Value<string>();
             Channel = configJson["channel"].Value<int>();
             MaxChannel = configJson["maxchannel"].Value<int>(); 
-            Volume = configJson["volume"].Value<int>(); 
-            MaxChannel = configJson["maxvolume"].Value<int>(); 
+            Volume = configJson["volume"].Value<int>();
+            MaxVolume = configJson["maxvolume"].Value<int>(); 
         }
     }
 }

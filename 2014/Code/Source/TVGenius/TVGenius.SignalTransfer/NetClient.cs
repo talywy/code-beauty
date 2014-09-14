@@ -11,10 +11,10 @@ namespace TVGenius.SignalTransfer
     {
         public event EventHandler<NetClinetMessageEventArgs> MessageReceived;
             
-        private Queue<string> _msgQueue = new Queue<string>(); 
-        private RequestSocket _req;
+        private readonly Queue<string> _msgQueue = new Queue<string>(); 
+        private readonly RequestSocket _req;
         private bool _isRunning;
-        private object _locker = new object();
+        private readonly object _locker = new object();
         private Thread _t;
 
         public NetClient(RequestSocket req)
@@ -53,11 +53,18 @@ namespace TVGenius.SignalTransfer
                 }
 
             }) { IsBackground = true };
+            _t.Start();
         }
 
         public void Stop()
         {
             _isRunning = false;
+
+            lock (_locker)
+            {
+                _msgQueue.Clear();
+            }
+
             if (_t.IsAlive)
             {
                 _t.Abort();

@@ -1,6 +1,5 @@
-﻿using NetMQ;
-using NetMQ.Sockets;
-using TVGenius.Model;
+﻿using TVGenius.Model;
+using TVGenius.SignalTransfer.Events;
 using TVGenius.Utils;
 
 namespace TVGenius.SignalTransfer.Dispatcher
@@ -10,29 +9,24 @@ namespace TVGenius.SignalTransfer.Dispatcher
     /// </summary>
     abstract public class SingalDispatcherBase
     {
-      
-        private bool _sendReady;
-        private RequestSocket _client;
+        private NetClient _client;
 
         public void BuildClient(string bindStr)
         {
-            _client = ZMQClientPool.Instance.GetClient(bindStr);
-            _client.SendReady += ClientOnSendReady;
+            _client = NetClientPool.Instance.GetClient(bindStr);
+            _client.MessageReceived += ClientOnMessageReceived;
             LogUtil.Log.DebugFormat("Signal dispatcher connect tv:{0}", bindStr);
+        }
+
+        private void ClientOnMessageReceived(object sender, NetClinetMessageEventArgs e)
+        {
+            LogUtil.Log.DebugFormat("Signal Dispatcher response:{0}", e.Message);
         }
 
         protected void SendMessage(string message)
         {
             LogUtil.Log.DebugFormat("Signal Dispatcher message:{0}", message);
-            _client.Send(message);
-            var rep = _client.ReceiveString();
-            LogUtil.Log.DebugFormat("Signal Dispatcher response:{0}", rep);
-        }
-
-        private void ClientOnSendReady(object sender, NetMQSocketEventArgs netMqSocketEventArgs)
-        {
-            LogUtil.Log.DebugFormat("Signal dispatcher is ready");
-            _sendReady = true;
+            _client.SendMessage(message);
         }
 
         /// <summary>
@@ -95,7 +89,7 @@ namespace TVGenius.SignalTransfer.Dispatcher
 
         protected string BuildActionSignal(string atcionType, string data = "")
         {
-            return string.Format("{{signal:\"{0}\", data:{{type:\"{1}\", data:{2}}}}}", SignalDefine.ACTION, atcionType, data);
+            return string.Format("{{signal:\"{0}\", data:{{type:\"{1}\", data:{2}}}}}", SignalDefine.ACTION, atcionType, string.IsNullOrEmpty(data) ? "\"\"" : data);
         }
     }
 }

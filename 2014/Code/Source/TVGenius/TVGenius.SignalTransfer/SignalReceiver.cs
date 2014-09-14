@@ -14,13 +14,11 @@ namespace TVGenius.SignalTransfer
         public event EventHandler<ActionReceivedEventArgs> ActionReceived;
 
         private bool _isRunning;
-        private readonly string _tvJson;
         private readonly MockTV _tv;
 
-        public SignalReceiver(string tvJson)
+        public SignalReceiver(MockTV tv)
         {
-            _tvJson = tvJson;
-            _tv = JsonConvert.DeserializeObject<MockTV>(tvJson);
+            _tv = tv;
         }
 
         public void Run()
@@ -47,7 +45,7 @@ namespace TVGenius.SignalTransfer
                                 var signal = msgJson["signal"].Value<string>();
                                 if (signal.Equals(SignalDefine.SCAN))
                                 {
-                                    server.Send(_tvJson);
+                                    server.Send(JsonConvert.SerializeObject(_tv));
                                 }
                                 else if (signal.Equals(SignalDefine.HEATBEAT))
                                 {
@@ -56,7 +54,8 @@ namespace TVGenius.SignalTransfer
                                 }
                                 else if (signal.Equals(SignalDefine.ACTION))
                                 {
-                                    server.Send("{signal:\"OK\"}");
+                                    var msg = GetResponseMessage(SignalDefine.OK);
+                                    server.Send(msg);
                                     var data = msgJson["data"].Value<JObject>();
                                     ActionReceived(this, new ActionReceivedEventArgs(data));
                                 }
@@ -82,7 +81,7 @@ namespace TVGenius.SignalTransfer
 
         public string GetResponseMessage(string signal)
         {
-            return string.Format("{{ signal:\"{0}\", sn:\"{1}\" }}", signal, _tv.Sn);
+            return string.Format("{{ signal:\"{0}\", sn:\"{1}\", state:\"{2}\" }}", signal, _tv.Sn, _tv.State);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace TVGenius.Utils
         private static string _appBase;
         private static string _resourceBase;
         private static string _iconBase;
+        private static string _videoBase;
 
         /// <summary>
         /// 程序运行根路径
@@ -42,6 +43,17 @@ namespace TVGenius.Utils
             get
             {
                 return _iconBase ?? (_iconBase = Path.Combine(ResourceBase, "icons"));
+            }
+        }
+
+        /// <summary>
+        /// 视频资源根路径
+        /// </summary>
+        public static string VideoBase
+        {
+            get
+            {
+                return _videoBase ?? (_videoBase = Path.Combine(ResourceBase, "videos"));
             }
         }
         

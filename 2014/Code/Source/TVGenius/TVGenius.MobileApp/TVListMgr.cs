@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Timers;
+using System.Windows;
 using Newtonsoft.Json;
 using TVGenius.Model;
 
@@ -30,13 +31,18 @@ namespace TVGenius.MobileApp
             _stateCheckTimer.Start();
         }
 
-        private void StateCheckTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        private void StateCheckTimerOnElapsed(object sender, ElapsedEventArgs e)
         {
             var now = DateTime.Now;
             for (int index = MockTVs.Count - 1; index > -1; index--)
             {
                 var tv = MockTVs[index];
-                tv.State = (now - tv.LastConnectTime).TotalSeconds > TV_MAX_IDLE_TIME ? TVState.Offline : TVState.PowerOn;
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    tv.State = (now - tv.LastConnectTime).TotalSeconds > TV_MAX_IDLE_TIME
+                        ? TVState.Offline
+                        : tv.State;
+                }));
             }
         }
 
@@ -94,13 +100,15 @@ namespace TVGenius.MobileApp
         /// 刷新电视
         /// </summary>
         /// <param name="tvSN">电视序列号</param>
-        public void RefreshTV(string tvSN)
+        /// <param name="state">电视状态</param>
+        public void RefreshTV(string tvSN, TVState state)
         {
             foreach (var tV in MockTVs)
             {
                 if (tV.Sn.Equals(tvSN))
                 {
                     tV.LastConnectTime = DateTime.Now;
+                    tV.State = state;
                 }
             }
         }

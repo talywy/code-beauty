@@ -24,5 +24,10 @@
         /// 回显消息
         /// </summary>
         public const string ECHO = "echo";
+
+        /// <summary>
+        /// 调用成功
+        /// </summary>
+        public const string OK = "ok";
     }
 }

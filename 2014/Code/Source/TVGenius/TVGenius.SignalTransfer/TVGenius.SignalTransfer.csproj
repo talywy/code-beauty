@@ -63,7 +63,7 @@
     <Compile Include="SignalReceiver.cs" />
     <Compile Include="Dispatcher\TCLDispatcher.cs" />
     <Compile Include="VolumeAction.cs" />
-    <Compile Include="ZMQClientPool.cs" />
+    <Compile Include="NetClientPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TVGenius.Model\TVGenius.Model.csproj">
